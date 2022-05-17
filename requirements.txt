@@ -5,7 +5,7 @@ plotly
 requests
 orjson
 datetime
-re
+regex
 bs4
 dateutil
 selenium
