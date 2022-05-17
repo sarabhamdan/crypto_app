@@ -7,7 +7,7 @@ orjson
 datetime
 regex
 bs4
-dateutil
+python-dateutil
 selenium
 webdriver_manager
 time
