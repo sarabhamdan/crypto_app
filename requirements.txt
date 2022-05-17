@@ -10,7 +10,6 @@ bs4
 python-dateutil
 selenium
 webdriver_manager
-time
 pycoingecko
 emoji
 gate_api
