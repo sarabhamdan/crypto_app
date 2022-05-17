@@ -18,4 +18,3 @@ hydralit_components
 yfinance
 autots
 tensorflow
-fbprophet
