@@ -13,7 +13,7 @@ webdriver_manager
 pycoingecko
 emoji
 gate_api
-st_aggrid
+streamlit-aggrid
 plotly
 hydralit_components
 yfinance
