@@ -1,1 +1,1 @@
-web: sh setup.sh && streamlit run used_cars_app.py 
+web: sh setup.sh && streamlit run crypto_app_ml.py 
