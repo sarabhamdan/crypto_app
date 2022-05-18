@@ -17,3 +17,4 @@ plotly
 hydralit_components
 yfinance
 autots
+sklearn
