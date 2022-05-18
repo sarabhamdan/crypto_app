@@ -1367,6 +1367,7 @@ if menu_id== "Real Time Forecasts":
     selection = names.multiselect("Click here to select from the list of cryptos meeting the desired criteria:", options= (np.sort(filtered_df2.name.unique())).tolist(), default= None)
     with indicator:
         st.write("")
+        st.write("")
         # indicators= st.checkbox(label="Technical Indicators", value = False, help="Include metrics scraped from Trading View on relative strength index - 14 days (RSI), average directional index (ADX), and moving average convergence-divergence (MACD).")
         show_change= st.checkbox("Display price % change calculation columns", key=43)
 
@@ -1381,8 +1382,8 @@ if menu_id== "Real Time Forecasts":
             listings= get_quotes(select_ids=selected_ids)
             single_forecasts = get_forecasts(data= listings, select_identifier= select_identifier)
 
-            if indicators:
-                get_indicators(data= single_forecasts)
+            # if indicators:
+            #     get_indicators(data= single_forecasts)
 
             ## perform forecast analysis on selected period
             forecast_analysis_single(period= user_period2,selection_data= single_forecasts, full_data= forecasts)
