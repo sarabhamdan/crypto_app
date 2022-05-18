@@ -1367,7 +1367,7 @@ if menu_id== "Real Time Forecasts":
     selection = names.multiselect("Click here to select from the list of cryptos meeting the desired criteria:", options= (np.sort(filtered_df2.name.unique())).tolist(), default= None)
     with indicator:
         st.write("")
-        indicators= st.checkbox(label="Technical Indicators", value = False, help="Include metrics scraped from Trading View on relative strength index - 14 days (RSI), average directional index (ADX), and moving average convergence-divergence (MACD).")
+        # indicators= st.checkbox(label="Technical Indicators", value = False, help="Include metrics scraped from Trading View on relative strength index - 14 days (RSI), average directional index (ADX), and moving average convergence-divergence (MACD).")
         show_change= st.checkbox("Display price % change calculation columns", key=43)
 
     submit= st.button("Get forecasts")
@@ -1401,17 +1401,17 @@ if menu_id== "Real Time Forecasts":
             else:
                 figs_to_display2=['name','symbol','platform','date_added','price', 'market_cap', 'data_source','Action','Min_Price', 'Max_Price', 'Avg_Price',
                 'Median_Price'] + cols_summary_sin[user_period2]
-            if indicators:
-                figs_to_display2= figs_to_display2 + ['RSI_14d','MACD','ADX']
-                indicators_cols=['RSI_14d','MACD','ADX']
-                for col in indicators_cols:
-                    styler[col]= '{:,.2f}'
+            # if indicators:
+            #     figs_to_display2= figs_to_display2 + ['RSI_14d','MACD','ADX']
+            #     indicators_cols=['RSI_14d','MACD','ADX']
+            #     for col in indicators_cols:
+            #         styler[col]= '{:,.2f}'
 
             final_single= single_forecasts[figs_to_display2]
             final_single.rename(columns={'platform': 'blockchain'}, inplace=True)
             final_single.columns= final_single.columns.str.title()
-            if indicators:
-                final_single.rename(columns={'Rsi_14D': 'RSI_14d', 'Macd':'MACD', 'Adx':'ADX'}, inplace= True)
+            # if indicators:
+            #     final_single.rename(columns={'Rsi_14D': 'RSI_14d', 'Macd':'MACD', 'Adx':'ADX'}, inplace= True)
             legend= """<i><text style="text-align:left; color:gray;font-size:13px;">Forecasts References: Cp- CryptoPredictions.com | Wi - Wallet Investor | Gc - Gov Capital | Dc - Digital Coin Price | Tb - Trading Beasts
                 </text></i>
                 """
@@ -1452,50 +1452,51 @@ if menu_id == "Wallet Tracker":
                 matches.append("remove")        
         coins_list['check']=matches
         coins_list.drop(coins_list[coins_list['check'] == "remove"].index, inplace=True)
-        # get coins list from Gate.io exchange
-        try:
-            # List all currency pairs on Gate.io
-            api_response = api_instance.list_currency_pairs()
-            base=[]
-            for i in range(0, len(api_response)):
-                if api_response[i].quote == "USDT":
-                    base.append(api_response[i].base)
-            gate_list= pd.DataFrame({"Symbol": base})
-            gate_list['Source'] = "Gate.io"
-            # save only the symbols not available on CoinGecko
-            gate_list = gate_list[gate_list.Symbol.isin(coins_list.Symbol) == False]
-            #get coins names through scraping
-            option = webdriver.ChromeOptions()
-            option.add_argument('headless')
-            driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=option)
-            url= "https://www.gate.io/marketlist?tab=usdt"
-            driver.get(url)
-            time.sleep(1)
-            html = driver.page_source
-            # response= requests.get(url)
-            soup= BeautifulSoup(html, 'html.parser')
-            rows= soup.find("table").find("tbody").find_all("tr")
-            symbols=[]
-            names=[]
-            for row in rows:
-                symbol= row.find_all("td")[0].find("span",{"class": "curr_a"}).get_text().strip()
-                name= row.find_all("td")[0].find("span",{"class": "cname"}).get_text().strip()
-                symbols.append(symbol)
-                names.append(name)
-            gate_names= pd.DataFrame({"Name": names,"Symbol": symbols})
-            gate_list=pd.merge(gate_list,gate_names,how="left")
-            gate_list.dropna(subset=['Name'], inplace=True)
-            gate_list.reset_index(drop=True, inplace=True)
-            gate_list['Name']= gate_list.Name.apply(lambda x: re.sub(r'\b\d+X\s', "",x))
-            gate_list['ID']= gate_list['Name'].str.lower() + "-" + gate_list['Symbol'].str.lower()
-            gate_list.drop_duplicates(inplace=True)
-            driver.quit()
-        except GateApiException as ex:
-            print("Gate api exception, label: %s, message: %s\n" % (ex.label, ex.message))
-        except ApiException as e:
-            print("Exception when calling DeliveryApi->list_delivery_contracts: %s\n" % e)
-        # combine data from both sources
-        all_coins= pd.concat([coins_list,gate_list])
+        # # get coins list from Gate.io exchange
+        # try:
+        #     # List all currency pairs on Gate.io
+        #     api_response = api_instance.list_currency_pairs()
+        #     base=[]
+        #     for i in range(0, len(api_response)):
+        #         if api_response[i].quote == "USDT":
+        #             base.append(api_response[i].base)
+        #     gate_list= pd.DataFrame({"Symbol": base})
+        #     gate_list['Source'] = "Gate.io"
+        #     # save only the symbols not available on CoinGecko
+        #     gate_list = gate_list[gate_list.Symbol.isin(coins_list.Symbol) == False]
+        #     #get coins names through scraping
+        #     option = webdriver.ChromeOptions()
+        #     option.add_argument('headless')
+        #     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=option)
+        #     url= "https://www.gate.io/marketlist?tab=usdt"
+        #     driver.get(url)
+        #     time.sleep(1)
+        #     html = driver.page_source
+        #     # response= requests.get(url)
+        #     soup= BeautifulSoup(html, 'html.parser')
+        #     rows= soup.find("table").find("tbody").find_all("tr")
+        #     symbols=[]
+        #     names=[]
+        #     for row in rows:
+        #         symbol= row.find_all("td")[0].find("span",{"class": "curr_a"}).get_text().strip()
+        #         name= row.find_all("td")[0].find("span",{"class": "cname"}).get_text().strip()
+        #         symbols.append(symbol)
+        #         names.append(name)
+        #     gate_names= pd.DataFrame({"Name": names,"Symbol": symbols})
+        #     gate_list=pd.merge(gate_list,gate_names,how="left")
+        #     gate_list.dropna(subset=['Name'], inplace=True)
+        #     gate_list.reset_index(drop=True, inplace=True)
+        #     gate_list['Name']= gate_list.Name.apply(lambda x: re.sub(r'\b\d+X\s', "",x))
+        #     gate_list['ID']= gate_list['Name'].str.lower() + "-" + gate_list['Symbol'].str.lower()
+        #     gate_list.drop_duplicates(inplace=True)
+        #     driver.quit()
+        # except GateApiException as ex:
+        #     print("Gate api exception, label: %s, message: %s\n" % (ex.label, ex.message))
+        # except ApiException as e:
+        #     print("Exception when calling DeliveryApi->list_delivery_contracts: %s\n" % e)
+        # # combine data from both sources
+        # all_coins= pd.concat([coins_list,gate_list])
+        all_coins= coins_list
         return all_coins
 
     with st.spinner("Please wait... Preparing portfolio template..."):
