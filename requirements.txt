@@ -18,3 +18,4 @@ hydralit_components
 yfinance
 autots
 sklearn
+statsmodels
